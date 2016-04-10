@@ -1,0 +1,85 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+  <model name="trash_can">
+    <static>true</static>
+        <visual name="visual1">
+          <geometry>
+            <box> 
+		<size> 0.25 0.25 0.01 </size>
+           </box>
+          </geometry>
+        </visual>
+        <visual name="visual2">
+          <pose>0.125 0 0.125  0 1.57 0 </pose>
+	  <geometry>
+            <box> 
+		<size> 0.25 0.25 0.01 </size>
+           </box>
+          </geometry>
+        </visual>
+        <visual name="visual3">
+          <pose>-0.125 0 0.125  0 1.57 0 </pose>
+	  <geometry>
+            <box> 
+		<size> 0.25 0.25 0.01 </size>
+           </box>
+          </geometry>
+        </visual>
+        <visual name="visual4">
+          <pose>0 0.125 0.125  1.57 0 0 </pose>
+	  <geometry>
+            <box> 
+		<size> 0.25 0.25 0.01 </size>
+           </box>
+          </geometry>
+        </visual>
+        <visual name="visual5">
+          <pose>0 -0.125 0.125  1.57 0 0 </pose>
+	  <geometry>
+            <box> 
+		<size> 0.25 0.25 0.01 </size>
+           </box>
+          </geometry>
+        </visual>
+        <collision name="collision1">
+          <geometry>
+            <box> 
+		<size> 0.25 0.25 0.01 </size>
+           </box>
+          </geometry>
+        </collision>
+        <collision name="collision2">
+          <pose>0.125 0 0.125  0 1.57 0 </pose>
+	  <geometry>
+            <box> 
+		<size> 0.25 0.25 0.01 </size>
+           </box>
+          </geometry>
+        </collision>
+        <collision name="collision3">
+          <pose>-0.125 0 0.125  0 1.57 0 </pose>
+	  <geometry>
+            <box> 
+		<size> 0.25 0.25 0.01 </size>
+           </box>
+          </geometry>
+        </collision>
+        <collision name="collision4">
+          <pose>0 0.125 0.125  1.57 0 0 </pose>
+	  <geometry>
+            <box> 
+		<size> 0.25 0.25 0.01 </size>
+           </box>
+          </geometry>
+        </collision>
+        <collision name="collision5">
+          <pose>0 -0.125 0.125  1.57 0 0 </pose>
+	  <geometry>
+            <box> 
+		<size> 0.25 0.25 0.01 </size>
+           </box>
+          </geometry>
+        </collision>
+    </link>
+  </model>
+</sdf>

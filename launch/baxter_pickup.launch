@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+  <include file="$(find baxter_gazebo)/launch/baxter_world.launch"/>
+  <param name="prefix" type="string" value="$(find baxter_pickup)/" />
+
+  <node pkg="tf2_ros" type="static_transform_publisher" name="block_to_world" args="0.192 0.01 1.33 -1.57 0.0 -2.52 /torso /cameras/head_camera" />
+  <node pkg="baxter_pickup" type="baxter_ik_service" name="baxter_ik_serv"/>
+  <node pkg="baxter_pickup" type="baxter_block_tracker" name="baxter_block_track"/>
+
+
+</launch>

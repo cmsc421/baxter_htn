@@ -1,0 +1,10 @@
+*.pyc
+
+*build
+
+*msg_gen
+*srv_gen
+*bin
+*~
+*Results.txt
+*ResultsEncoded.txt
