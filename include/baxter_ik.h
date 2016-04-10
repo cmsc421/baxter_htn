@@ -27,8 +27,10 @@ public:
   bool checkDistance(std::vector<coordinate> coordinates, coordinate coor);
   bool baxter_IK_left(baxter_pickup_msgs::BaxterIK::Request &req, baxter_pickup_msgs::BaxterIK::Response &res);
   bool baxter_IK_right(baxter_pickup_msgs::BaxterIK::Request &req, baxter_pickup_msgs::BaxterIK::Response &res);
-  void spawnTable();
-  void spawnBlock(std::string model_name, geometry_msgs::Pose model_pose);
+  void spawnTable(std::string name, float x, float y, float z);
+  void spawnredBlock(std::string model_name, geometry_msgs::Pose model_pose);
+  void spawngreenBlock(std::string model_name, geometry_msgs::Pose model_pose);
+  void spawnblueBlock(std::string model_name, geometry_msgs::Pose model_pose);
   void spawnTrash();
   std::string file_prefix;
 };
