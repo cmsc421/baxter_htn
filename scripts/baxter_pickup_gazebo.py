@@ -17,6 +17,7 @@ from std_msgs.msg import (
     Empty,
 )
 import baxter_interface
+from gazebo_msgs.srv import GetModelState
 from baxter_pickup_msgs.srv import BaxterIK, BaxterIKRequest
 import copy
 import math
@@ -26,7 +27,7 @@ class BaxterPickup:
         # Initialize Node
         rospy.init_node('grabber', anonymous=True)
         # Subscribe to sensor data
-        rospy.Subscriber("/block_location", BlockArray, self.model_callback)
+        #rospy.Subscriber("/block_location", BlockArray, self.model_callback)
         rospy.Subscriber("/plan", Plan, self.plan_callback)
         self._name = name
         self._ID = ID
@@ -164,14 +165,19 @@ class BaxterPickup:
     def ungripR(self):
         self._gripperR.open()
         rospy.sleep(1.0)
-    def model_callback(self, data): 
-        if self._check_for_blocks==True:
-            self._block_locations=data
-	    self._check_for_blocks=False
+    def get_blocks(self): 
+	gzblock = rospy.ServiceProxy('/gazebo/get_model_state/', GetModelState)
+        green = gzblock('block01','world')
+        green = [green.pose.position.x+0.02, green.pose.position.y+0.03, green.pose.position.z-0.91] 
+	red = gzblock('block02','world')
+        red = [red.pose.position.x+0.02, red.pose.position.y+0.03, red.pose.position.z-0.91] 
+        blue = gzblock('block03','world')
+        blue = [blue.pose.position.x+0.02, blue.pose.position.y+0.03, blue.pose.position.z-0.91] 
+        return {'red':red, 'green':green, 'blue':blue}
     def main(self):
         while(True):
-            self._check_for_blocks=True
-            if self._block_locations and self._plan:
+            block_locations = self.get_blocks()
+            if self._plan:
                 if len(self._plan.plan)==0:
                     print "Finished"
                     finished_str = self._ID + ":" + self._name
@@ -187,19 +193,23 @@ class BaxterPickup:
                 if plan[0] == "pickup":
                     block = plan[1]
                     hand = plan[2]
-                    for b in self._block_locations.blocks:
-                        if b.color.data==block:
+                    for b in block_locations.iteritems():
+                        if b[0]==block:
+                            p = Point()
+                            p.x = b[1][0]
+                            p.y = b[1][1]
+                            p.z = b[1][2]
                             if hand=="left":
-                                self.move_to_approach_positionL(b.pose.point)
+                                self.move_to_approach_positionL(p)
                                 self._gripperL.open()
-                                self.move_to_pickup_positionL(b.pose.point)
+                                self.move_to_pickup_positionL(p)
                                 self._gripperL.close()
                                 rospy.sleep(0.5)
                                 self._limbL.move_to_joint_positions(self._start_positionL)
                             if hand=="right":
-                                self.move_to_approach_positionR(b.pose.point)
+                                self.move_to_approach_positionR(p)
                                 self._gripperR.open()
-                                self.move_to_pickup_positionR(b.pose.point)
+                                self.move_to_pickup_positionR(p)
                                 self._gripperR.close()
                                 rospy.sleep(0.5)
                                 self._limbR.move_to_joint_positions(self._start_positionR)
@@ -210,8 +220,8 @@ class BaxterPickup:
                     block = plan[1]
                     pos = plan[2]
                     hand = plan[3]
-                    for b in self._block_locations.blocks:
-                        if b.color.data==block:
+                    for b in block_locations.iteritems():
+                        if b[0]==block:
                             if hand=="left" and pos=="center":
                                 p = Point()
                                 if block=="red":
@@ -289,10 +299,6 @@ class BaxterPickup:
                                 self._limbR.move_to_joint_positions(self._start_positionR)
                                 self._plan.plan.pop(0)
 
-                self._block_locations = []
-                self._limbL.move_to_joint_positions(self._r_positionL)
-                self._limbR.move_to_joint_positions(self._r_positionR)
-            
 if __name__ == "__main__":
     student_name = raw_input("Enter the your name (Last, First): ")
     student_ID = raw_input("Enter the UID: ")
